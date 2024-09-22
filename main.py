@@ -1,3 +1,5 @@
+from math import trunc
+
 import pygame
 from sys import exit
 from random import randint, choice
@@ -17,8 +19,8 @@ bg_music.play(loops = -1)
 bg_music.set_volume(0.1)
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, group):
-        super().__init__(group)
+    def __init__(self):
+        super().__init__()
 
         player_walk_1 = pygame.image.load('assets/graphics/Player/player_walk_1.png').convert_alpha()
         player_walk_2 = pygame.image.load('assets/graphics/Player/player_walk_2.png').convert_alpha()
@@ -66,10 +68,10 @@ class Player(pygame.sprite.Sprite):
             self.image = self.player_walk[int(self.player_index)]
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, group, enemy_type):
-        super().__init__(group)
+    def __init__(self, type):
+        super().__init__()
 
-        if enemy_type == 'fly':
+        if type == 'fly':
             # Fly
             fly_frame_1 = pygame.image.load('assets/graphics/Fly/fly1.png').convert_alpha()
             fly_frame_2 = pygame.image.load('assets/graphics/Fly/fly2.png').convert_alpha()
@@ -108,10 +110,10 @@ def display_score():
     screen.blit(score_surf, score_rect)
     return current_time
 
-def collisions(player_sprite, obstacles):
+def collisions(player, obstacles):
     if obstacles:
         for obstacle_rect in obstacles:
-            if player_sprite.colliderect(obstacle_rect):
+            if player.colliderect(obstacle_rect):
                 return False
     return True
 
@@ -123,7 +125,7 @@ def collision_sprite():
 
 # Groups
 player = pygame.sprite.GroupSingle()
-Player(player)
+player.add(Player())
 
 obstacle_group = pygame.sprite.Group()
 
@@ -160,7 +162,7 @@ while True:
 
         if game_active:
             if event.type == obstacle_timer:
-                Obstacle(enemy_type= choice(['fly', 'snail', 'snail', 'snail']), group = obstacle_group)
+                obstacle_group.add(Obstacle(type = choice(['fly', 'snail', 'snail', 'snail'])))
 
         else:
             if event.type == pygame.KEYDOWN:

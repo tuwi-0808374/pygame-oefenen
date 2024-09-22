@@ -1,3 +1,5 @@
+from math import trunc
+
 import pygame
 from sys import exit
 from random import randint, choice
@@ -107,10 +109,16 @@ def collisions(player, obstacles):
                 return False
     return True
 
+def collision_sprite():
+    if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
+        return False
+    else:
+        return True
 
 # Groups
 player = pygame.sprite.GroupSingle()
 player.add(Player())
+
 obstacle_group = pygame.sprite.Group()
 
 sky_surface = pygame.image.load('assets/graphics/Sky.png').convert()
@@ -170,13 +178,14 @@ while True:
         obstacle_group.draw(screen)
         obstacle_group.update()
 
+        game_active = collision_sprite()
+
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
 
         screen.blit(game_name, game_name_rect)
-        player.draw(screen)
-
+        obstacle_group.empty()
 
         if score == 0:
             screen.blit(game_message, game_message_rect)

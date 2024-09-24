@@ -18,7 +18,14 @@ enemy_image = pygame.image.load('assets/images/enemies/enemy_1.png').convert_alp
 # create groups
 enemy_group = pygame.sprite.Group()
 
-enemy = Enemy((200, 300), enemy_image)
+waypoints = [
+    (100, 100),
+    (400, 200),
+    (400, 100),
+    (200, 300),
+]
+
+enemy = Enemy(waypoints, enemy_image)
 enemy_group.add(enemy)
 
 
@@ -29,6 +36,9 @@ while run:
     clock.tick(c.FPS)
 
     screen.fill("grey")
+
+    # draw enemy path
+    pygame.draw.lines(screen, "red", False, waypoints)
 
     # update groups
     enemy_group.update()

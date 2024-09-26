@@ -54,8 +54,8 @@ def create_turret(mouse_pos):
                 space_is_free = False
 
         if space_is_free:
-            turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
-            turret_group.add(turret)
+            new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
+            turret_group.add(new_turret)
 
 # game loop
 run = True

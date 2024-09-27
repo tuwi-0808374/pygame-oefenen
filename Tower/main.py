@@ -22,6 +22,8 @@ placing_turrets = False
 # load images
 # Map
 map_image = pygame.image.load("levels/level.png").convert_alpha()
+# turrets spritesheets
+turret_sheet = pygame.image.load("assets/images/turrets/turret_1.png").convert_alpha()
 # Individual turret image for mouse cursor
 cursor_turret = pygame.image.load("assets/images/turrets/cursor_turret.png").convert_alpha()
 # Enemies
@@ -61,7 +63,7 @@ def create_turret(mouse_pos):
                 space_is_free = False
 
         if space_is_free:
-            new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)
+            new_turret = Turret(turret_sheet, mouse_tile_x, mouse_tile_y)
             turret_group.add(new_turret)
 
 # create button
@@ -79,6 +81,7 @@ while run:
     clock.tick(c.FPS)
     # update groups
     enemy_group.update()
+    turret_group.update()
 
     #
     # DRAW

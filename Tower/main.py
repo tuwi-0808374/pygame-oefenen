@@ -18,6 +18,7 @@ pygame.display.set_caption("Tower Game")
 
 # game variables
 placing_turrets = False
+selected_turret = None
 
 # load images
 # Map
@@ -66,6 +67,17 @@ def create_turret(mouse_pos):
             new_turret = Turret(turret_sheet, mouse_tile_x, mouse_tile_y)
             turret_group.add(new_turret)
 
+def select_turret(mouse_pos):
+    mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
+    mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
+    for turret in turret_group:
+        if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+            return turret
+
+def clear_selection():
+    for turret in turret_group:
+        turret.selected = False
+
 # create button
 turret_button = Button(c.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(c.SCREEN_WIDTH + 50, 180, cancel_image, True)
@@ -81,7 +93,10 @@ while run:
     clock.tick(c.FPS)
     # update groups
     enemy_group.update()
-    turret_group.update()
+    turret_group.update(enemy_group)
+
+    if selected_turret:
+        selected_turret.selected = True
 
     #
     # DRAW
@@ -97,7 +112,8 @@ while run:
 
     # draw groups
     enemy_group.draw(screen)
-    turret_group.draw(screen)
+    for turret in turret_group:
+        turret.draw(screen)
 
     # draw buttons
     if turret_button.draw(screen):
@@ -128,8 +144,12 @@ while run:
                 mouse_pos = pygame.mouse.get_pos()
                 # check if mouse is on game area
                 if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
+                    selected_turret = None
+                    clear_selection()
                     if placing_turrets:
                         create_turret(mouse_pos)
+                    else:
+                        selected_turret = select_turret(mouse_pos)
 
 
 pygame.quit()
